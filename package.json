@@ -1,46 +1,38 @@
 {
-  "name": "gulp-css-globbing",
-  "version": "0.2.2",
-  "description": "A Gulp plugin for globbing CSS @import statements",
-  "author": "Johan Sahlén <johan@monospace.se>",
-  "contributors": [
-    {
-      "name": "Scott Nath",
-      "url": "https://github.com/scottnath"
+    "name"         : "gulp-css-globbing",
+    "version"      : "0.2.2",
+    "description"  : "A Gulp plugin for globbing CSS @import statements",
+    "homepage"     : "https://github.com/Donov4n/gulp-css-glob",
+    "license"      : "MIT",
+    "repository"   : "Donov4n/gulp-css-glob",
+    "author"       : "Johan Sahlén <johan@monospace.se>",
+    "main"         : "index.js",
+    "keywords"     : ["gulpplugin", "css", "glob"],
+    "contributors" : [
+        { "name": "Scott Nath", "url": "https://github.com/scottnath" },
+        { "name": "Thomas Creeten", "url": "https://github.com/CREEATION" },
+        { "name": "Franco Arza", "url": "https://github.com/arzafran" },
+        { "name": "Donovan Lambert", "url": "https://github.com/scottnath" }
+    ],
+    "scripts": {
+        "lint" : "eslint .",
+        "test" : "./node_modules/.bin/mocha"
     },
-    {
-      "name": "Thomas Creeten",
-      "url": "https://github.com/CREEATION"
+    "dependencies": {
+        "glob"      : "^7.1.2",
+        "gulp-util" : "^3.0.8",
+        "vinyl-map" : "^1.0.2"
     },
-    {
-      "name": "Franco Arza",
-      "url": "https://github.com/arzafran"
+    "devDependencies": {
+        "event-stream"              : "^3.1.7",
+        "mocha"                     : "^3.4.2",
+        "should"                    : "^11.2.1",
+        "vinyl"                     : "^2.0.2",
+        "eslint"                    : "^4.19.1",
+        "eslint-config-airbnb-base" : "^13.0.0",
+        "eslint-plugin-import"      : "^2.13.0"
+    },
+    "engines": {
+        "node": ">=8.0.0"
     }
-  ],
-  "repository": "git://github.com/arzafran/gulp-css-globbing.git",
-  "bugs": "https://github.com/arzafran/gulp-css-globbing/issues",
-  "license": "MIT",
-  "main": "index.js",
-  "dependencies": {
-    "glob": "^7.1.2",
-    "gulp-util": "^3.0.8",
-    "vinyl-map": "^1.0.2"
-  },
-  "devDependencies": {
-    "event-stream": "^3.1.7",
-    "mocha": "^3.4.2",
-    "should": "^11.2.1",
-    "vinyl": "^2.0.2"
-  },
-  "scripts": {
-    "test": "./node_modules/.bin/mocha"
-  },
-  "keywords": [
-    "gulpplugin",
-    "css",
-    "glob"
-  ],
-  "engines": {
-    "node": ">=5.12.0"
-  }
 }
