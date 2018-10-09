@@ -1,29 +1,25 @@
-# gulp-css-globbing [![Build Status][travis-image]][travis-url] [![Dependency Status][depstat-image]][depstat-url]
+# gulp-css-glob [![Build Status][travis-image]][travis-url]
 > A Gulp plugin for globbing CSS `@import` statements
 
 Expands CSS `@import` statements containing globs with the full paths. Useful with pre-processors like Sass.
 
-Heavily inspired by [`sass-globbing`](https://github.com/chriseppstein/sass-globbing)
-
-**NEW MANTAINER NOTICE:** This library proved useful for me and that's why I've started to actively mantain it.
-
 ## Install
 
-Install `gulp-css-globbing` as a development dependency using npm:
+Install `gulp-css-glob` as a development dependency using npm:
 
 ```shell
-npm install --save-dev gulp-css-globbing
+yarn add gulp-css-glob --dev
 ```
 
 ## Usage
 
-```javascript
-var cssGlobbing = require('gulp-css-globbing');
+```js
+const cssGlobbing = require('gulp-css-globbing');
 
-gulp.task('css', function(){
-  gulp.src(['src/styles.css'])
-    .pipe(cssGlobbing())
-    .pipe(gulp.dest('build/styles.css'));
+gulp.task('css', () => {
+    gulp.src(['src/styles.css'])
+        .pipe(cssGlobbing())
+        .pipe(gulp.dest('build/styles.css'));
 });
 ```
 
@@ -33,7 +29,7 @@ Given a CSS file that looks like this:
 @import url('components/*.css');
 
 body {
-  background: white;
+      background: white;
 }
 ```
 
@@ -44,7 +40,7 @@ The plugin would produce the following:
 @import url('components/media.css');
 
 body {
-  background: white;
+      background: white;
 }
 ```
 
@@ -55,24 +51,17 @@ Globbing is relative to the source file's path.
 
 `gulp-css-globbing` can be called with an options object:
 
-```javascript
+```js
 gulp.task('css', function(){
-  gulp.src(['src/styles.css'])
-    .pipe(cssGlobbing({
-      extensions: ['.css', '.scss'],
-      ignoreFolders: ['../styles'],
-      autoReplaceBlock: {
-        onOff: false,
-        globBlockBegin: 'cssGlobbingBegin',
-        globBlockEnd: 'cssGlobbingEnd',
-        globBlockContents: '../**/*.scss'
-      },
-      scssImportPath: {
-        leading_underscore: false,
-        filename_extension: false
-      }
-    }))
-    .pipe(gulp.dest('build/styles.css'));
+    gulp.src(['src/styles.css'])
+        .pipe(cssGlobbing({
+            extensions     : ['.css', '.scss'],
+            scssImportPath : {
+                leading_underscore : false,
+                filename_extension : false
+            }
+        }))
+        .pipe(gulp.dest('build/styles.css'));
 });
 ```
 
@@ -82,35 +71,6 @@ Type: `String` or `Array`
 The file extensions to treat as valid imported files. If files are found that match the glob, but its extensions don't match this option, they will not be added to the resulting file.
 
 Default: `['.css']`
-
-### ignoreFolders
-Type: `String` or `Array`
-
-Folders gulp-css-globbing should ignore. Each folder should be relative to the source file.
-
-Default: `['']`
-
-### autoReplaceBlock
-Type: `String` or `Object`
-
-Search for a block of text which is replaced with the path to the files we want to glob. Path can be re-replaced each time we call gulp-css-globbing.
-
-Default: 
-```
-{
-  onOff: false,
-  globBlockBegin: 'cssGlobbingBegin',
-  globBlockEnd: 'cssGlobbingEnd',
-  globBlockContents: '../**/*.scss'
-}
-```
-
-With the above settings, inside of your main .scss file you would only need to have this:
-```
-// cssGlobbingBegin
-// this line can be blank
-// cssGlobbingEnd
-```
 
 ### scssImportPath
 Type: `Object`
@@ -135,7 +95,5 @@ If `filename_extension` is set to `false`, then the the extension of a file name
 
 
 
-[travis-url]: https://travis-ci.org/arzafran/gulp-css-globbing
-[travis-image]: https://travis-ci.org/arzafran/gulp-css-globbing.svg?branch=master
-[depstat-url]: https://david-dm.org/arzafran/gulp-css-globbing
-[depstat-image]: https://david-dm.org/arzafran/gulp-css-globbing.svg
+[travis-url]: https://travis-ci.org/Donov4n/gulp-css-glob
+[travis-image]: https://travis-ci.org/Donov4n/gulp-css-glob.svg?branch=master
