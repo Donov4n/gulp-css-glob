@@ -1,6 +1,6 @@
 {
-    "name"         : "gulp-css-globbing",
-    "version"      : "0.2.2",
+    "name"         : "gulp-css-glob",
+    "version"      : "1.0.0",
     "description"  : "A Gulp plugin for globbing CSS @import statements",
     "homepage"     : "https://github.com/Donov4n/gulp-css-glob",
     "license"      : "MIT",
