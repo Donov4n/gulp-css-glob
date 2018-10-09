@@ -1,66 +1,78 @@
 'use strict';
 
-var gutil = require('gulp-util');
-var glob  = require('glob');
-var map   = require('vinyl-map');
-var path  = require('path');
+const PluginError = require('plugin-error');
+const glob        = require('glob');
+const map         = require('vinyl-map');
+const path        = require('path');
 
 // Constants
-var PLUGIN_NAME = 'gulp-css-globbing';
+const PLUGIN_NAME = 'gulp-css-globbing';
 
-var cssGlobbingPlugin = function(options) {
+const _normalizeOptions = (options) => {
     if (!options) {
         options = {};
     }
-    if (!options.extensions) {
-        options.extensions = ['.css', '.scss'];
+    const _options = Object.assign({}, options);
+
+    if (!_options.extensions) {
+        _options.extensions = ['.css', '.scss'];
+    }
+    if (typeof _options.extensions === 'string') {
+        _options.extensions = [_options.extensions];
+    }
+    if (!(_options.extensions instanceof Array)) {
+        throw new PluginError(PLUGIN_NAME, `Extensions needs to be a string or an array`);
     }
 
-    var scssImportPathDefaults = {
-        leading_underscore : false,
-        filename_extension : false
-    };
-
-    if (typeof options.extensions == 'string') {
-        options.extensions = [options.extensions];
+    if (_options.scssImportPath && !(_options.scssImportPath instanceof Object)) {
+        throw new PluginError(PLUGIN_NAME, `SCSS import path needs to be an object`);
     }
-    if (!(options.extensions instanceof Array)) {
-        throw new gutil.PluginError(PLUGIN_NAME, 'extensions needs to be a string or an array');
-    }
+    _options.scssImportPath = Object.assign(
+        { leading_underscore: false, filename_extension: false },
+        _options.scssImportPath
+    );
 
-    if (options.scssImportPath && !(options.scssImportPath instanceof Object)) {
-        throw new gutil.PluginError(PLUGIN_NAME, 'SCSS import path needs to be an object');
-    }
-    options.scssImportPath = Object.assign({}, scssImportPathDefaults, options.scssImportPath);
+    return _options;
+};
 
-    return map(function(code, filename) {
-        var content      = code.toString();
-        var semicolon    = path.extname(filename).indexOf('.sass') !== -1 ? '' : ';';
-        var importRegExp = /^\s*@import\s+((?:url\()?["']?)?([^"'\)]+)(['"]?(?:\))?)?;?\s*$/gm;
-        var globRegExp   = /\/\*/;
+const cssGlobbingPlugin = function (options) {
+    options = _normalizeOptions(options);
 
-        var files;
-        content = content.replace(importRegExp, function(result, prefix, filePattern, suffix) {
-            files = [];
+    return map((code, filename) => {
+        const extension      = path.extname(filename);
+        const isImporterSass = ['.scss', '.sass'].includes(extension);
+        const semicolon      = extension.indexOf('.sass') !== -1 ? '' : ';';
+        const importRegExp   = /^\s*@import\s+((?:url\()?["']?)?([^"'\)]+)(['"]?(?:\))?)?;?\s*$/gm;
+        const globRegExp     = /\/\*/;
+
+        return code.toString().replace(importRegExp, (result, prefix, filePattern, suffix) => {
+            const files = [];
 
             if (globRegExp.exec(filePattern)) {
                 glob.sync(filePattern, { cwd: path.dirname(filename) }).forEach(
-                    function(foundFilePath) {
-                        if (options.extensions.indexOf(path.extname(foundFilePath)) !== -1) {
-                            var foundFilename = path.basename(foundFilePath);
-                            var foundFileDirname = path.dirname(foundFilePath);
+                    (foundFilePath) => {
+                        const foundFileExt = path.extname(foundFilePath);
 
-                            if (!options.scssImportPath.filename_extension) {
-                                foundFilename = path.basename(foundFilename, path.extname(foundFilename));
-                            }
+                        if (options.extensions.includes(foundFileExt)) {
+                            let foundFilename      = path.basename(foundFilePath);
+                            const foundFileDirname = path.dirname(foundFilePath);
 
-                            if (!options.scssImportPath.leading_underscore) {
-                                foundFilename = foundFilename.replace(/^_/, '');
+                            if (isImporterSass) {
+                                if (
+                                    !options.scssImportPath.filename_extension &&
+                                    ['.scss', '.sass'].includes(foundFileExt)
+                                ) {
+                                    foundFilename = path.basename(foundFilename, foundFileExt);
+                                }
+
+                                if (!options.scssImportPath.leading_underscore) {
+                                    foundFilename = foundFilename.replace(/^_/, '');
+                                }
                             }
 
                             foundFilePath = path
                                 .join(foundFileDirname, foundFilename)
-                                .replace(new RegExp('\\' + path.sep, 'g'), '/');
+                                .replace(new RegExp(`\\${path.sep}`, 'g'), '/');
 
                             files.push(foundFilePath);
                         }
@@ -69,18 +81,16 @@ var cssGlobbingPlugin = function(options) {
 
                 if (files.length) {
                     result = '';
-                    files.forEach(function(foundFilePath) {
-                        result += '@import ' + prefix + foundFilePath + suffix + semicolon + '\n';
+                    files.forEach((foundFilePath) => {
+                        result += `@import ${prefix}${foundFilePath}${suffix}${semicolon}\n`;
                     });
                 } else {
-                    result = '/* No files to import found in ' + filePattern.replace(/\//g, '//') + ' */';
+                    result = `/* No files to import found in ${filePattern.replace(/\//g, '//')} */`;
                 }
             }
 
             return result;
         });
-
-        return content;
     });
 };
 
