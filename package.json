@@ -12,7 +12,7 @@
         { "name": "Scott Nath", "url": "https://github.com/scottnath" },
         { "name": "Thomas Creeten", "url": "https://github.com/CREEATION" },
         { "name": "Franco Arza", "url": "https://github.com/arzafran" },
-        { "name": "Donovan Lambert", "url": "https://github.com/scottnath" }
+        { "name": "Donovan Lambert", "url": "https://github.com/Donov4n" }
     ],
     "scripts": {
         "lint" : "eslint .",
@@ -24,11 +24,11 @@
         "vinyl-map"    : "^1.0.2"
     },
     "devDependencies": {
-        "eslint"                    : "^5.6.1",
+        "eslint"                    : "^5.9.0",
         "eslint-config-airbnb-base" : "^13.1.0",
         "eslint-plugin-import"      : "^2.14.0",
         "event-stream"              : "^4.0.1",
-        "mocha"                     : "^4.0.0",
+        "mocha"                     : "^5.2.0",
         "should"                    : "^13.2.3",
         "vinyl"                     : "^2.2.0"
     },

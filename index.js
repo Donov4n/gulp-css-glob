@@ -28,6 +28,7 @@ const _normalizeOptions = (options) => {
         throw new PluginError(PLUGIN_NAME, `SCSS import path needs to be an object`);
     }
     _options.scssImportPath = Object.assign(
+        // eslint-disable-next-line camelcase
         { leading_underscore: false, filename_extension: false },
         _options.scssImportPath
     );
@@ -42,7 +43,7 @@ const cssGlobbingPlugin = function (options) {
         const extension      = path.extname(filename);
         const isImporterSass = ['.scss', '.sass'].includes(extension);
         const semicolon      = extension.indexOf('.sass') !== -1 ? '' : ';';
-        const importRegExp   = /^\s*@import\s+((?:url\()?["']?)?([^"'\)]+)(['"]?(?:\))?)?;?\s*$/gm;
+        const importRegExp   = /^\s*@import\s+((?:url\()?["']?)?([^"')]+)(['"]?(?:\))?)?;?\s*$/gm;
         const globRegExp     = /\/\*/;
 
         return code.toString().replace(importRegExp, (result, prefix, filePattern, suffix) => {
