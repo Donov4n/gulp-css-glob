@@ -2,8 +2,8 @@
 
 const PluginError = require('plugin-error');
 const glob        = require('glob');
-const map         = require('vinyl-map');
 const path        = require('path');
+const map         = require('./vinyl-map');
 
 // Constants
 const PLUGIN_NAME = 'gulp-css-globbing';
